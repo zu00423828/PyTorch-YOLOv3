@@ -160,7 +160,7 @@ class YOLOLayer(nn.Module):
 
     @staticmethod
     def _make_grid(nx=20, ny=20):
-        yv, xv = torch.meshgrid([torch.arange(ny), torch.arange(nx)], indexing='ij')
+        yv, xv = torch.meshgrid([torch.arange(ny), torch.arange(nx)])
         return torch.stack((xv, yv), 2).view((1, 1, ny, nx, 2)).float()
 
 
@@ -194,7 +194,7 @@ class Darknet(nn.Module):
                 x = module[0](x, img_size)
                 yolo_outputs.append(x)
             layer_outputs.append(x)
-        return yolo_outputs if self.training else torch.cat(yolo_outputs, 1)
+        return yolo_outputs if self.training else torch.cat(yolo_outputs, 1),layer_outputs
 
     def load_darknet_weights(self, weights_path):
         """Parses and loads the weights stored in 'weights_path'"""
